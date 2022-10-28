@@ -8,8 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
-    <Folder Include="ViewModels\" />
+    <Compile Remove="Data\**" />
+    <Compile Remove="ViewModels\**" />
+    <Content Remove="Data\**" />
+    <Content Remove="ViewModels\**" />
+    <EmbeddedResource Remove="Data\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
+    <None Remove="Data\**" />
+    <None Remove="ViewModels\**" />
   </ItemGroup>
 
 </Project>
