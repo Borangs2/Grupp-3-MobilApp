@@ -1,0 +1,106 @@
+﻿@page "/ErrandDetails"
+@page "/ErrandDetails/{ErrandId}"
+@using Grupp3_MobilApp.Services
+@using Grupp3_MobilApp.Models
+
+@inject IErrandService ErrandService;
+@inject ICommentService CommentService;
+@inject NavigationManager Navigation;
+
+<h3>Errand Details</h3>
+
+@if (_errand == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Last edited</th>
+                    <th>Created at</th>
+                    <th>Created by</th>
+                    <th>Technician</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@_errand.Title</td>
+                    <td>@_errand.Description</td>
+                    <td>@_errand.Status</td>
+                    <td>@_errand.LastEdited.ToString("d")</td>
+                    <td>@_errand.CreatedAt.ToString("d")</td>
+                    <td>@_errand.CreatedBy</td>
+                    <td>@_errand.Technician.Name</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <div class="table-responsive">
+        <h3>Comments</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="col-10">Comment</th>
+                    @*<th>Author</th>*@
+                    <th>Posted</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var comment in _errand.Comments)
+                {
+                    <tr>
+                        <td class="col-10">@comment.Content</td>
+                        @*<td>@comment.Author</td>*@
+                        <td>@comment.PostedAt.ToString("d")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="mx-auto">
+            <form method="post" class="form-control">
+                <div class="text-center">
+                    <textarea @bind="Content" class="form-control mt-3" placeholder="Write comment here..."></textarea>
+                    <button @onclick="AddComment" class="mt-3 mb-3 btn btn-primary" type="submit">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+@code {
+
+    public string Content;
+
+    [Parameter]
+    public string ErrandId { get; set; }
+
+    ErrandModel _errand;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _errand = await ErrandService.GetErrandByIdAsync(ErrandId);
+    }
+
+    public async void AddComment()
+    {
+        var commentModel = new CreateErrandCommentModel
+            {
+                Id = Guid.NewGuid(),
+                Author = _errand.Technician.Id,
+                Content = Content,
+                PostedAt = DateTime.Now,
+                ErrandId = _errand.Id
+            };
+
+        await CommentService.SaveCommentAsync(commentModel);
+    }
+}
