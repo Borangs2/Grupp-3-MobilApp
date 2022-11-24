@@ -22,7 +22,6 @@ namespace Grupp3_MobilApp
         builder.Services.AddSingleton<IErrandService, ErrandService>();
         builder.Services.AddSingleton<ITechnicianService, TechnicianService>();
         builder.Services.AddSingleton<ICommentService, CommentService>();
-
 #endif
 
 
