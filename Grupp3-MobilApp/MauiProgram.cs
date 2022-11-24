@@ -1,5 +1,4 @@
-﻿using Grupp3_MobilApp.Data;
-using Microsoft.AspNetCore.Components.WebView.Maui;
+﻿using Microsoft.AspNetCore.Components.WebView.Maui;
 
 namespace Grupp3_MobilApp
 {
@@ -20,7 +19,6 @@ namespace Grupp3_MobilApp
 		builder.Services.AddBlazorWebViewDeveloperTools();
 #endif
 
-            builder.Services.AddSingleton<WeatherForecastService>();
 
             return builder.Build();
         }
