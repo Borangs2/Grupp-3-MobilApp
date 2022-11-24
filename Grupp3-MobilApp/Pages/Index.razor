@@ -1,5 +1,55 @@
 ﻿@page "/"
+@using Grupp3_MobilApp.Services
+@using Grupp3_MobilApp.Models
+@inject IElevatorService ElevatorService;
+@inject NavigationManager Navigation;
 
-<h1>Hello, world!</h1>
+<h1>All Elevators</h1>
 
-Welcome to your new app.
+@if (_elevators == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table">
+            <thead>   
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>DoorStatus</th>
+                <th>CurrentLevel</th>
+                <th>TargetLevel</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var elevator in _elevators)
+            {
+                <tr @onclick="@(()=>DisplayOption(elevator))">
+                    <td>@elevator.Name</td>
+                    <td>@elevator.Status</td>
+                    <td>@elevator.DoorStatus</td>
+                    <td>@elevator.CurrentLevel</td>
+                    <td>@elevator.TargetLevel</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code
+{
+    IEnumerable<ElevatorDetailsModel> _elevators;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _elevators = await ElevatorService.GetAllElevatorsAsync();
+    }
+
+    private  void DisplayOption(ElevatorDetailsModel elevator)
+    {
+        Navigation.NavigateTo($"ElevatorDetails/{ elevator.Id.ToString() }");
+    }
+}
