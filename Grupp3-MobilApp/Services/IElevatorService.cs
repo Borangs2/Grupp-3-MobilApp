@@ -14,6 +14,7 @@ namespace Grupp3_MobilApp.Services
         Task<IEnumerable<ElevatorDetailsModel>> GetAllElevatorsAsync();
         Task<ElevatorDetailsModel> GetElevatorByIdAsync(string id);
     }
+
     public class ElevatorService : IElevatorService
     {
         private const string BaseUrl = "https://grupp3azurefunctions.azurewebsites.net/api";
