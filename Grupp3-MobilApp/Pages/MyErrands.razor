@@ -1,0 +1,61 @@
+﻿@page "/MyErrands"
+@page "/MyErrands/{TechnicianId}"
+@using Grupp3_MobilApp.Services
+@using Grupp3_MobilApp.Models
+@inject IErrandService ErrandService
+@inject NavigationManager Navigation
+
+<h3>My Errands</h3>
+
+@if (_errands == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>CreatedBy</th>
+                <th>Technicians</th>
+                <th>Comments</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var errand in _errands)
+            {
+                <tr @onclick="@(()=>DisplayOption(errand))">
+                    <td>@errand.Title</td>
+                    <td>@errand.Status</td>
+                    <td>@errand.CreatedBy</td>
+                    <td>@errand.Technician.Name</td>
+                    <td>@errand.Comments.Count</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+
+
+
+@code {
+    [Parameter]
+    public string TechnicianId { get; set; }
+
+    IEnumerable<ErrandModel> _errands;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _errands = await ErrandService.GetErrandsFromTechnicianIdAsync(TechnicianId);
+    }
+
+    private void DisplayOption(ErrandModel errand)
+    {
+        Navigation.NavigateTo($"ErrandDetails/{ errand.Id.ToString() }");
+    }
+}
+
