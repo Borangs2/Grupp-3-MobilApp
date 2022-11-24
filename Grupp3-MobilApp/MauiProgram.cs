@@ -20,6 +20,7 @@ namespace Grupp3_MobilApp
 		builder.Services.AddBlazorWebViewDeveloperTools();
         builder.Services.AddSingleton<IElevatorService, ElevatorService>();
         builder.Services.AddSingleton<IErrandService, ErrandService>();
+        builder.Services.AddSingleton<ITechnicianService, TechnicianService>();
 #endif
 
 
