@@ -34,12 +34,7 @@ stages:
           dotnet workload install maui --source https://aka.ms/dotnet6/nuget/index.json --source https://api.nuget.org/v3/index.json
           dotnet workload install android ios maccatalyst tvos macos maui wasm-tools --source https://aka.ms/dotnet6/nuget/index.json --source https://api.nuget.org/v3/index.json
     
-    - task: Bash@3
-      displayName: Restore nuget
-      inputs:
-        targetType: 'inline'
-        script: |
-          dotnet restore Grupp3 MobilApp.sln
+    
   # https://docs.microsoft.com/en-us/dotnet/maui/android/deployment/overview
     - task: Bash@3
       displayName: Build Android App
