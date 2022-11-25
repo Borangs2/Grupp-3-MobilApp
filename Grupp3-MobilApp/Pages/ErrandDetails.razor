@@ -110,24 +110,24 @@ else
     public async void AddComment()
     {
         var commentModel = new CreateErrandCommentModel
-            {
-                Id = Guid.NewGuid(),
-                Author = _errand.Technician.Id,
-                Content = Content,
-                PostedAt = DateTime.Now,
-                ErrandId = _errand.Id
-            };
+        {
+            Id = Guid.NewGuid(),
+            Author = _errand.Technician.Id,
+            Content = Content,
+            PostedAt = DateTime.Now,
+            ErrandId = _errand.Id
+        };
 
         var statusCode = await CommentService.SaveCommentAsync(commentModel);
 
         if (statusCode.ToString() == "OK")
         {
             await OnInitializedAsync();
-            await App.Current.MainPage.DisplayAlert("", "Comment was saved", "Ok");
+            await App.Current.MainPage.DisplayAlert("Success", "Comment was saved", "Ok");
         }
         else
         {
-            await App.Current.MainPage.DisplayAlert("", "Failed to save comment", "Ok");
+            await App.Current.MainPage.DisplayAlert("Error", "Failed to save comment", "Ok");
         }
     }
 
