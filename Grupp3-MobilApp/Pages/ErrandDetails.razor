@@ -15,6 +15,7 @@
 else
 {
     <div class="table-responsive">
+        <button @onclick="ReturnToMyErrands">Back</button>
         <table class="table">
             <thead>
                 <tr>
@@ -107,6 +108,11 @@ else
         _errand = await ErrandService.GetErrandByIdAsync(ErrandId);
     }
 
+    public void ReturnToMyErrands()
+    {
+        Navigation.NavigateTo($"MyErrands/{_errand.Technician.Id.ToString()}");
+    }
+
     public async void AddComment()
     {
         var commentModel = new CreateErrandCommentModel
@@ -130,7 +136,6 @@ else
         {
             await OnInitializedAsync();
             await App.Current.MainPage.DisplayAlert("", "Status was updated", "Ok");
-
         }
         else
         {
