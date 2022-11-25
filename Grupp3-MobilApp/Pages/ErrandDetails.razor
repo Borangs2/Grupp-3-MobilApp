@@ -31,21 +31,7 @@ else
                 <tr>
                     <td>@_errand.Title</td>
                     <td>@_errand.Description</td>
-                    <td>
-                        <select value="@SelectedStatus" @onchange="@ChangeStatus">
-                            @foreach (var status in StatusList)
-                            {
-                                if (_errand.Status == status)
-                                {
-                                    <option selected value="@status.ToString()">@status.ToString()</option>
-                                }
-                                else
-                                {
-                                    <option value="@status.ToString()">@status.ToString()</option>
-                                }
-                            }
-                        </select>
-                    </td>
+                    <td>@_errand.Status</td>
                     <td>@_errand.LastEdited.ToString("d")</td>
                     <td>@_errand.CreatedAt.ToString("d")</td>
                     <td>@_errand.CreatedBy</td>
@@ -98,10 +84,6 @@ else
 
     ErrandModel _errand;
 
-    public ErrandStatus SelectedStatus;
-
-    List<ErrandStatus> StatusList = Enum.GetValues(typeof(ErrandStatus)).Cast<ErrandStatus>().ToList();
-
     protected override async Task OnInitializedAsync()
     {
         _errand = await ErrandService.GetErrandByIdAsync(ErrandId);
@@ -120,23 +102,5 @@ else
 
         await CommentService.SaveCommentAsync(commentModel);
         await OnInitializedAsync();
-    }
-
-    public async void ChangeStatus(ChangeEventArgs e)
-    {
-        var statusCode = await ErrandService.UpdateStatusAsync(ErrandId, e.Value.ToString());
-
-        if (statusCode.ToString() == "OK")
-        {
-            await OnInitializedAsync();
-            await App.Current.MainPage.DisplayAlert("", "Status was updated", "Ok");
-
-        }
-        else
-        {
-            await App.Current.MainPage.DisplayAlert("", "Statusupdate not succeed", "Ok");
-        }
-        
-        
     }
 }

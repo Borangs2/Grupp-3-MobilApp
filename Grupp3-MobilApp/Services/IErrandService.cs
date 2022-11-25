@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Grupp3_MobilApp.Models;
 using Newtonsoft.Json;
-using System.Net;
 
 namespace Grupp3_MobilApp.Services
 {
@@ -14,8 +13,6 @@ namespace Grupp3_MobilApp.Services
     {
         Task<ErrandModel> GetErrandByIdAsync(string id);
         Task<IEnumerable<ErrandModel>> GetErrandsFromTechnicianIdAsync(string id);
-
-        Task<HttpStatusCode> UpdateStatusAsync(string errandId, string status);
     }
 
     public class ErrandService : IErrandService
@@ -74,29 +71,6 @@ namespace Grupp3_MobilApp.Services
                 Debug.WriteLine(@"\tERROR {0}", ex.Message);
             }
             return Errands;
-
-        }
-
-        public async Task<HttpStatusCode> UpdateStatusAsync(string errandId, string status)
-        {
-            ChangeErrandStatusModel errandstatus = new ChangeErrandStatusModel { ErrandId = errandId, Status = status.ToString() };
-
-            var uri = new Uri(string.Format($"{BaseUrl}/errands?", string.Empty));
-
-            var json = JsonConvert.SerializeObject(errandstatus);
-
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _client.PutAsync(uri, content);
-
-            if (response.IsSuccessStatusCode)
-            {
-                return HttpStatusCode.OK;
-            }
-            else
-            {
-                return HttpStatusCode.BadRequest;
-            }
         }
     }
 }
