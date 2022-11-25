@@ -123,11 +123,11 @@ else
         if (statusCode.ToString() == "OK")
         {
             await OnInitializedAsync();
-            await App.Current.MainPage.DisplayAlert("", "Comment was saved", "Ok");
+            await App.Current.MainPage.DisplayAlert("Success", "Comment was saved", "Ok");
         }
         else
         {
-            await App.Current.MainPage.DisplayAlert("", "Failed to save comment", "Ok");
+            await App.Current.MainPage.DisplayAlert("Error", "Failed to save comment", "Ok");
         }
     }
 
