@@ -110,16 +110,25 @@ else
     public async void AddComment()
     {
         var commentModel = new CreateErrandCommentModel
-        {
-            Id = Guid.NewGuid(),
-            Author = _errand.Technician.Id,
-            Content = Content,
-            PostedAt = DateTime.Now,
-            ErrandId = _errand.Id
-        };
+            {
+                Id = Guid.NewGuid(),
+                Author = _errand.Technician.Id,
+                Content = Content,
+                PostedAt = DateTime.Now,
+                ErrandId = _errand.Id
+            };
 
-        await CommentService.SaveCommentAsync(commentModel);
-        await OnInitializedAsync();
+        var statusCode = await CommentService.SaveCommentAsync(commentModel);
+
+        if (statusCode.ToString() == "OK")
+        {
+            await OnInitializedAsync();
+            await App.Current.MainPage.DisplayAlert("", "Comment was saved", "Ok");
+        }
+        else
+        {
+            await App.Current.MainPage.DisplayAlert("", "Failed to save comment", "Ok");
+        }
     }
 
     public async void ChangeStatus(ChangeEventArgs e)
@@ -130,7 +139,6 @@ else
         {
             await OnInitializedAsync();
             await App.Current.MainPage.DisplayAlert("", "Status was updated", "Ok");
-
         }
         else
         {
