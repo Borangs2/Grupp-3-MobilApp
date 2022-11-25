@@ -124,8 +124,17 @@ else
             ErrandId = _errand.Id
         };
 
-        await CommentService.SaveCommentAsync(commentModel);
-        await OnInitializedAsync();
+        var statusCode = await CommentService.SaveCommentAsync(commentModel);
+
+        if (statusCode.ToString() == "OK")
+        {
+            await OnInitializedAsync();
+            await App.Current.MainPage.DisplayAlert("Success", "Comment was saved", "Ok");
+        }
+        else
+        {
+            await App.Current.MainPage.DisplayAlert("Error", "Failed to save comment", "Ok");
+        }
     }
 
     public async void ChangeStatus(ChangeEventArgs e)
