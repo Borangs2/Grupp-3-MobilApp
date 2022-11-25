@@ -92,14 +92,15 @@ else
     public async void AddComment()
     {
         var commentModel = new CreateErrandCommentModel
-            {
-                Id = Guid.NewGuid(),
-                Author = _errand.Technician.Id,
-                Content = Content,
-                PostedAt = DateTime.Now,
-                ErrandId = _errand.Id
-            };
+        {
+            Id = Guid.NewGuid(),
+            Author = _errand.Technician.Id,
+            Content = Content,
+            PostedAt = DateTime.Now,
+            ErrandId = _errand.Id
+        };
 
         await CommentService.SaveCommentAsync(commentModel);
+        await OnInitializedAsync();
     }
 }
