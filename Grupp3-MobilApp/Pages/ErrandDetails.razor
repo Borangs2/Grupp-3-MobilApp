@@ -48,18 +48,18 @@ else
         <table class="table">
             <thead>
                 <tr>
-                    <th class="col-10">Comment</th>
-                    @*<th>Author</th>*@
-                    <th>Posted</th>
+                    <th class="col-8">Comment</th>
+                    <th class="col-2">Author</th>
+                    <th class="col-2">Posted</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var comment in _errand.Comments)
+                @foreach (var comment in _errand.Comments.OrderByDescending(c => c.PostedAt).Take(5))
                 {
                     <tr>
-                        <td class="col-10">@comment.Content</td>
-                        @*<td>@comment.Author</td>*@
-                        <td>@comment.PostedAt.ToString("d")</td>
+                        <td class="col-8">@comment.Content</td>
+                        <td class="col-2">@comment.Author</td>
+                        <td class="col-2">@comment.PostedAt.ToString("d")</td>
                     </tr>
                 }
             </tbody>
