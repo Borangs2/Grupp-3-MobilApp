@@ -14,7 +14,6 @@ namespace Grupp3_MobilApp.Services
     {
         Task<ErrandModel> GetErrandByIdAsync(string id);
         Task<IEnumerable<ErrandModel>> GetErrandsFromTechnicianIdAsync(string id);
-
         Task<HttpStatusCode> UpdateStatusAsync(string errandId, string status);
     }
 

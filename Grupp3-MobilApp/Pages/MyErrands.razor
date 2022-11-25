@@ -14,6 +14,7 @@
 else
 {
     <div class="table-responsive">
+        <button @onclick="ReturnToSelectTechnician">Back</button>
         <table class="table">
             <thead>
             <tr>
@@ -51,6 +52,11 @@ else
     protected override async Task OnInitializedAsync()
     {
         _errands = await ErrandService.GetErrandsFromTechnicianIdAsync(TechnicianId);
+    }
+
+    public void ReturnToSelectTechnician()
+    {
+        Navigation.NavigateTo($"SelectTechnician/");
     }
 
     private void DisplayOption(ErrandModel errand)
