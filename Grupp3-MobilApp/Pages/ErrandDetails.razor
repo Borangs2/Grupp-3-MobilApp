@@ -15,7 +15,7 @@
 else
 {
     <div class="table-responsive">
-        <button @onclick="ReturnToPrevious">Back</button>
+        <button @onclick="ReturnToMyErrands">Back</button>
         <table class="table">
             <thead>
                 <tr>
@@ -108,7 +108,7 @@ else
         _errand = await ErrandService.GetErrandByIdAsync(ErrandId);
     }
 
-    public void ReturnToPrevious()
+    public void ReturnToMyErrands()
     {
         Navigation.NavigateTo($"MyErrands/{_errand.Technician.Id.ToString()}");
     }
