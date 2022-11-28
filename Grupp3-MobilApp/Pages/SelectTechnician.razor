@@ -5,21 +5,16 @@
 
 <h3>Select Technician</h3>
 
-@if (technicians == null)
+@if (_technicians == null)
 {
     <p>Loading...</p>
 }
 else
 {
-    <div class="table-responsive">
+    <div class="table-responsive container card mt-3">
         <table class="table">
-            <thead>
-            <tr>
-                <th>Name</th>
-            </tr>
-            </thead>
             <tbody>
-            @foreach (var technician in technicians)
+            @foreach (var technician in _technicians)
             {
                 <tr @onclick="@(()=>DisplayOption(technician))">
                     <td>@technician.Name</td>
@@ -33,11 +28,11 @@ else
 
 @code {
 
-    public IEnumerable<TechnicianModel> technicians;
+    IEnumerable<TechnicianModel> _technicians;
 
     protected override async Task OnInitializedAsync()
     {
-        technicians = await TechnicianService.GetAllTechnicians();
+        _technicians = await TechnicianService.GetAllTechnicians();
     }
 
     private void DisplayOption(TechnicianModel technician)
