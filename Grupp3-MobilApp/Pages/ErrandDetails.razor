@@ -56,8 +56,6 @@ else
         </table>
     </div>
 
-
-
     <div class="table-responsive">
         <h3>Comments</h3>
         <table class="table">
@@ -120,7 +118,7 @@ else
             Id = Guid.NewGuid(),
             Author = _errand.Technician.Id,
             Content = Content,
-            PostedAt = DateTime.Now,
+            PostedAt = DateTime.Parse(DateTime.Now.ToString("G")),
             ErrandId = _errand.Id
         };
 
@@ -144,11 +142,11 @@ else
         if (statusCode.ToString() == "OK")
         {
             await OnInitializedAsync();
-            await App.Current.MainPage.DisplayAlert("", "Status was updated", "Ok");
+            await App.Current.MainPage.DisplayAlert("Success", "Status was updated", "Ok");
         }
         else
         {
-            await App.Current.MainPage.DisplayAlert("", "Statusupdate not succeed", "Ok");
+            await App.Current.MainPage.DisplayAlert("Error", "Statusupdate not succeed", "Ok");
         }
     }
 }
