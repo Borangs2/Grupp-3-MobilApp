@@ -2,6 +2,7 @@
 @page "/ErrandDetails/{ErrandId}"
 @inject IErrandService ErrandService;
 @inject ICommentService CommentService;
+@inject ITechnicianService TechnicianService;
 @inject NavigationManager Navigation;
 
 <h3>Errand Details</h3>
@@ -60,16 +61,16 @@ else
             <thead>
                 <tr>
                     <th class="col-8">Comment</th>
-                    @*<th class="col-2">Author</th>*@
+                    <th class="col-2">Author</th>
                     <th class="col-2">Posted</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var comment in _errand.Comments.OrderByDescending(c => c.PostedAt).Take(5))
+                @foreach (var comment in _comments.OrderByDescending(c => c.PostedAt).Take(5))
                 {
                     <tr>
                         <td class="col-8">@comment.Content</td>
-                        @*<td class="col-2">@comment.Author</td>*@
+                        <td class="col-2">@comment.Author.Name</td>
                         <td class="col-2">@comment.PostedAt.ToString("d")</td>
                     </tr>
                 }
@@ -99,9 +100,24 @@ else
 
     List<ErrandStatus> StatusList = Enum.GetValues(typeof(ErrandStatus)).Cast<ErrandStatus>().ToList();
 
+    List<CommentViewModel> _comments;
+
     protected override async Task OnInitializedAsync()
     {
         _errand = await ErrandService.GetErrandByIdAsync(ErrandId);
+        _comments = new List<CommentViewModel>();
+
+        foreach (var comment in _errand.Comments)
+        {
+            var commentViewModel = new CommentViewModel
+            {
+                Id = comment.Id,
+                Author = await TechnicianService.GetTechnicianByIdAsync(comment.Author.ToString()),
+                Content = comment.Content,
+                PostedAt = comment.PostedAt
+            };
+            _comments.Add(commentViewModel);
+        }
     }
 
     public void ReturnToMyErrands()
