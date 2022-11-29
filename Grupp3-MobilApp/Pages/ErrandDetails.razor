@@ -11,7 +11,7 @@
 }
 else
 {
-    <div class="container">
+    <div>
         <div class="d-flex justify-content-between">
             <div>
                 <h3>Errand Details</h3>
@@ -21,44 +21,55 @@ else
             </div>
         </div>
 
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Last edited</th>
-                <th>Created at</th>
-                <th>Created by</th>
-                <th>Technician</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>@_errand.Title</td>
-                <td>@_errand.Description</td>
-                <td>
-                    <select value="@SelectedStatus" @onchange="@ChangeStatus">
-                        @foreach (var status in _statusList)
-                        {
-                            if (_errand.Status == status)
+        <div class="card shadow mb-3">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th>Title</th>
+                    <td>@_errand.Title</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>@_errand.Description</td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td>
+                        <select class="form-select" value="@SelectedStatus" @onchange="@ChangeStatus">
+                            @foreach (var status in _statusList)
                             {
-                                <option selected value="@status.ToString()">@status.ToString()</option>
+                                if (_errand.Status == status)
+                                {
+                                    <option selected value="@status.ToString()">@status.ToString()</option>
+                                }
+                                else
+                                {
+                                    <option value="@status.ToString()">@status.ToString()</option>
+                                }
                             }
-                            else
-                            {
-                                <option value="@status.ToString()">@status.ToString()</option>
-                            }
-                        }
-                    </select>
-                </td>
-                <td>@_errand.LastEdited.ToString("d")</td>
-                <td>@_errand.CreatedAt.ToString("d")</td>
-                <td>@_errand.CreatedBy</td>
-                <td>@_errand.Technician.Name</td>
-            </tr>
-            </tbody>
-        </table>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Last edited</th>
+                    <td>@_errand.LastEdited.ToString("d")</td>
+                </tr>
+                <tr>
+                    <th>Created at</th>
+                    <td>@_errand.CreatedAt.ToString("d")</td>
+                </tr>
+                <tr>
+                    <th>Created by</th>
+                    <td>@_errand.CreatedBy</td>
+                </tr>
+                <tr>
+                    <th>Technician</th>
+                    <td>@_errand.Technician.Name</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        
     </div>
 
     <div class="table-responsive">
