@@ -43,32 +43,6 @@ else
                     </div>
                 </div>
             }
-            @*<div class="table-responsive container card">
-                <table class="table">
-                    <tbody class="card-body">
-                    @foreach (var errand in _errands)
-                    {
-                        <tr @onclick="@(() => DisplayThisErrand(errand))">
-                            <th>Title</th>
-                            <td>@errand.Title</td>
-                        </tr>
-                        <tr @onclick="@(() => DisplayThisErrand(errand))">
-                            <th>Status</th>
-                            <td>@errand.Status</td>
-                        </tr>
-                        <tr @onclick="@(() => DisplayThisErrand(errand))">
-                            <th>Technician</th>
-                            <td>@errand.Technician.Name</td>
-                        </tr>
-                        <tr @onclick="@(() => DisplayThisErrand(errand))">
-                            <th>Comments</th>
-                            <td>@errand.Comments.Count</td>
-                        </tr>
-                        <tr>-----------------------</tr>
-                    }
-                    </tbody>
-                </table>
-            </div>*@
         </div>
     </div>
 }
