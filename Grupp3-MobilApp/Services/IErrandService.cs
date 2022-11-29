@@ -15,6 +15,7 @@ namespace Grupp3_MobilApp.Services
         Task<ErrandModel> GetErrandByIdAsync(string id);
         Task<IEnumerable<ErrandModel>> GetErrandsFromTechnicianIdAsync(string id);
         Task<HttpStatusCode> UpdateStatusAsync(string errandId, string status);
+        Task<HttpStatusCode> UpdateErrand_LastEditAsync(string errandId);
     }
 
     public class ErrandService : IErrandService
@@ -90,12 +91,22 @@ namespace Grupp3_MobilApp.Services
             if (response.IsSuccessStatusCode)
             {
                 return HttpStatusCode.OK;
-                //return RedirectToPage("ErrandDetails", new { elevatorId, errandId = Errand.Id.ToString() });
             }
             else
             {
                 return HttpStatusCode.BadRequest;
             }
+        }
+
+        public async Task<HttpStatusCode> UpdateErrand_LastEditAsync(string id)
+        {
+            var uri = new Uri(string.Format($"{BaseUrl}/errand/update?id={id}", string.Empty));
+
+            var content = new StringContent("", Encoding.UTF8, "application/json");
+
+            var response = await _client.PutAsync(uri, content);
+
+            return response.IsSuccessStatusCode ? HttpStatusCode.NoContent : HttpStatusCode.BadRequest;
         }
     }
 }
