@@ -5,34 +5,36 @@
 @inject ITechnicianService TechnicianService;
 @inject NavigationManager Navigation;
 
-<h3>Errand Details</h3>
-
 @if (_errand == null)
 {
     <p>Loading...</p>
 }
 else
 {
-    <div class="table-responsive">
-        <button @onclick="ReturnToMyErrands">Back</button>
-        <table class="table">
-            <thead>
+    <div>
+        <div class="d-flex justify-content-between">
+            <div>
+                <h3>Errand Details</h3>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-primary" @onclick="ReturnToMyErrands">Back</button>
+            </div>
+        </div>
+        <div class="card shadow mb-3">
+            <table class="table">
+                <tbody>
                 <tr>
                     <th>Title</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Last edited</th>
-                    <th>Created at</th>
-                    <th>Created by</th>
-                    <th>Technician</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
                     <td>@_errand.Title</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
                     <td>@_errand.Description</td>
+                </tr>
+                <tr>
+                    <th>Status</th>
                     <td>
-                        <select value="@SelectedStatus" @onchange="@ChangeStatus">
+                        <select class="form-select" value="@SelectedStatus" @onchange="@ChangeStatus">
                             @foreach (var status in _statusList)
                             {
                                 if (_errand.Status == status)
@@ -46,40 +48,49 @@ else
                             }
                         </select>
                     </td>
+                </tr>
+                <tr>
+                    <th>Last edited</th>
                     <td>@_errand.LastEdited.ToString("d")</td>
+                </tr>
+                <tr>
+                    <th>Created at</th>
                     <td>@_errand.CreatedAt.ToString("d")</td>
+                </tr>
+                <tr>
+                    <th>Created by</th>
                     <td>@_errand.CreatedBy</td>
+                </tr>
+                <tr>
+                    <th>Technician</th>
                     <td>@_errand.Technician.Name</td>
                 </tr>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
+        
     </div>
 
-    <div class="table-responsive">
-        <h3>Comments</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th class="col-8">Comment</th>
-                    <th class="col-2">Author</th>
-                    <th class="col-2">Posted</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var comment in _comments.OrderByDescending(c => c.PostedAt).Take(5))
-                {
-                    <tr>
-                        <td class="col-8">@comment.Content</td>
-                        <td class="col-2">@comment.Author.Name</td>
-                        <td class="col-2">@comment.PostedAt.ToString("d")</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <div class="mx-auto">
+    <h3 class="mb-3">Comments</h3>
+    <div class="d-flex flex-column gap-2">
+        @foreach (var comment in _comments.OrderByDescending(c => c.PostedAt).Take(5))
+        {
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row border-bottom">
+                        <div class="col-8 fw-bold mb-2">@comment.Author.Name</div>
+                        <div class="col-4 fw-bold mb-2">@comment.PostedAt.ToString("d")</div>
+                    </div>
+                    <div class="row mt-2">
+                        <div>@comment.Content</div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="mb-4 card shadow">
             <form method="post" class="form-control">
                 <div class="text-center">
-                    <textarea @bind="Content" class="form-control mt-3" placeholder="Write comment here..."></textarea>
+                    <textarea @bind="Content" class="form-control" placeholder="Write comment here..."></textarea>
                     <button @onclick="AddCommentAsync" class="mt-3 mb-3 btn btn-primary" type="submit">Save</button>
                 </div>
             </form>
