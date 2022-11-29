@@ -3,42 +3,49 @@
 @inject IErrandService ErrandService
 @inject NavigationManager Navigation
 
-<h3>My Errands</h3>
-
 @if (_errands == null)
 {
     <p>Loading...</p>
 }
 else
 {
-    <div class="table-responsive">
-        <button @onclick="ReturnToSelectTechnician">Back</button>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Title</th>
-                <th>Status</th>
-                <th>CreatedBy</th>
-                <th>Technicians</th>
-                <th>Comments</th>
-            </tr>
-            </thead>
-            <tbody>
+    <div class="container">
+        <div class="d-flex justify-content-between">
+            <div class="mb-3">
+                <h3>My Errands</h3>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-primary" @onclick="ReturnToSelectTechnician">Back</button>
+            </div>
+        </div>
+
+        <div class="d-flex flex-column gap-2">
             @foreach (var errand in _errands)
             {
-                <tr @onclick="@(()=>DisplayOption(errand))">
-                    <td>@errand.Title</td>
-                    <td>@errand.Status</td>
-                    <td>@errand.CreatedBy</td>
-                    <td>@errand.Technician.Name</td>
-                    <td>@errand.Comments.Count</td>
-                </tr>
+                <div class="card mb-3 shadow" @onclick="@(() => DisplayThisErrand(errand))">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-4 fw-bold">Title</div>
+                            <div class="col-8">@errand.Title</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 fw-bold">Status</div>
+                            <div class="col-8">@errand.Status</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 fw-bold">Technician</div>
+                            <div class="col-8">@errand.Technician.Name</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 fw-bold">Comments</div>
+                            <div class="col-8">@errand.Comments.Count</div>
+                        </div>
+                    </div>
+                </div>
             }
-            </tbody>
-        </table>
+        </div>
     </div>
 }
-
 
 
 @code {
@@ -57,7 +64,7 @@ else
         Navigation.NavigateTo($"SelectTechnician/");
     }
 
-    private void DisplayOption(ErrandModel errand)
+    private void DisplayThisErrand(ErrandModel errand)
     {
         Navigation.NavigateTo($"ErrandDetails/{ errand.Id.ToString() }");
     }
