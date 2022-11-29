@@ -10,5 +10,6 @@ namespace Grupp3_MobilApp.Models
     {
         public string ErrandId { get; set; }
         public string Status { get; set; }
+        public string LastEdited { get; set; } 
     }
 }

@@ -101,7 +101,9 @@ else
     readonly List<ErrandStatus> _statusList = Enum.GetValues(typeof(ErrandStatus)).Cast<ErrandStatus>().ToList();
 
     List<CommentViewModel> _comments;
-    
+
+    public string lastEdited;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -152,7 +154,7 @@ else
 
     public async void ChangeStatus(ChangeEventArgs e)
     {
-        var statusCode = await ErrandService.UpdateStatusAsync(ErrandId, e.Value.ToString());
+        var statusCode = await ErrandService.UpdateStatusAsync(ErrandId, e.Value.ToString(), lastEdited = DateTime.Now.ToString());
 
         if (statusCode.ToString() == HttpStatusCode.OK.ToString())
         {

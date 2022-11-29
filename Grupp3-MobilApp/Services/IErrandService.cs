@@ -14,7 +14,7 @@ namespace Grupp3_MobilApp.Services
     {
         Task<ErrandModel> GetErrandByIdAsync(string id);
         Task<IEnumerable<ErrandModel>> GetErrandsFromTechnicianIdAsync(string id);
-        Task<HttpStatusCode> UpdateStatusAsync(string errandId, string status);
+        Task<HttpStatusCode> UpdateStatusAsync(string errandId, string status, string lastEdited);
     }
 
     public class ErrandService : IErrandService
@@ -75,9 +75,9 @@ namespace Grupp3_MobilApp.Services
             return Errands;
         }
 
-        public async Task<HttpStatusCode> UpdateStatusAsync(string errandId, string status)
+        public async Task<HttpStatusCode> UpdateStatusAsync(string errandId, string status, string lastEdited)
         {
-            ChangeErrandStatusModel errandstatus = new ChangeErrandStatusModel { ErrandId = errandId, Status = status.ToString() };
+            ChangeErrandStatusModel errandstatus = new ChangeErrandStatusModel { ErrandId = errandId, Status = status.ToString(), LastEdited = lastEdited };
 
             var uri = new Uri(string.Format($"{BaseUrl}/errands?", string.Empty));
 
