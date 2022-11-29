@@ -18,9 +18,8 @@ else
                 <button class="btn btn-primary" @onclick="ReturnToSelectTechnician">Back</button>
             </div>
         </div>
-
         <div class="d-flex flex-column gap-2">
-            @foreach (var errand in _errands)
+            @foreach (var errand in _errands.Where(e => e.Status != ErrandStatus.Done).OrderByDescending(e => e.CreatedAt))
             {
                 <div class="card mb-3 shadow" @onclick="@(() => DisplayThisErrand(errand))">
                     <div class="card-body">
