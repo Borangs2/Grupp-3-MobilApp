@@ -33,7 +33,7 @@ else
                     <td>@_errand.Description</td>
                     <td>
                         <select value="@SelectedStatus" @onchange="@ChangeStatus">
-                            @foreach (var status in StatusList)
+                            @foreach (var status in _statusList)
                             {
                                 if (_errand.Status == status)
                                 {
@@ -80,7 +80,7 @@ else
             <form method="post" class="form-control">
                 <div class="text-center">
                     <textarea @bind="Content" class="form-control mt-3" placeholder="Write comment here..."></textarea>
-                    <button @onclick="AddComment" class="mt-3 mb-3 btn btn-primary" type="submit">Save</button>
+                    <button @onclick="AddCommentAsync" class="mt-3 mb-3 btn btn-primary" type="submit">Save</button>
                 </div>
             </form>
         </div>
@@ -98,9 +98,10 @@ else
 
     public ErrandStatus SelectedStatus;
 
-    List<ErrandStatus> StatusList = Enum.GetValues(typeof(ErrandStatus)).Cast<ErrandStatus>().ToList();
+    readonly List<ErrandStatus> _statusList = Enum.GetValues(typeof(ErrandStatus)).Cast<ErrandStatus>().ToList();
 
     List<CommentViewModel> _comments;
+    
 
     protected override async Task OnInitializedAsync()
     {
@@ -125,7 +126,7 @@ else
         Navigation.NavigateTo($"MyErrands/{_errand.Technician.Id.ToString()}");
     }
 
-    public async void AddComment()
+    public async void AddCommentAsync()
     {
         var commentModel = new CreateErrandCommentModel
         {
@@ -138,29 +139,29 @@ else
 
         var statusCode = await CommentService.SaveCommentAsync(commentModel);
 
-        if (statusCode.ToString() == "OK")
+        if (statusCode.ToString() == HttpStatusCode.OK.ToString())
         {
-            await OnInitializedAsync();
             await App.Current.MainPage.DisplayAlert("Success", "Comment was saved", "Ok");
         }
         else
         {
             await App.Current.MainPage.DisplayAlert("Error", "Failed to save comment", "Ok");
         }
+        await OnInitializedAsync();
     }
 
     public async void ChangeStatus(ChangeEventArgs e)
     {
         var statusCode = await ErrandService.UpdateStatusAsync(ErrandId, e.Value.ToString());
 
-        if (statusCode.ToString() == "OK")
+        if (statusCode.ToString() == HttpStatusCode.OK.ToString())
         {
-            await OnInitializedAsync();
             await App.Current.MainPage.DisplayAlert("Success", "Status was updated", "Ok");
         }
         else
         {
-            await App.Current.MainPage.DisplayAlert("Error", "Statusupdate not succeed", "Ok");
+            await App.Current.MainPage.DisplayAlert("Error", "Status update not succeed", "Ok");
         }
+        await OnInitializedAsync();
     }
 }

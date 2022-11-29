@@ -16,7 +16,7 @@ else
             <tbody>
             @foreach (var technician in _technicians)
             {
-                <tr @onclick="@(()=>DisplayOption(technician))">
+                <tr @onclick="@(()=>DisplayMyErrands(technician))">
                     <td>@technician.Name</td>
                 </tr>
             }
@@ -35,7 +35,7 @@ else
         _technicians = await TechnicianService.GetAllTechnicians();
     }
 
-    private void DisplayOption(TechnicianModel technician)
+    private void DisplayMyErrands(TechnicianModel technician)
     {
         Navigation.NavigateTo($"MyErrands/{ technician.Id.ToString() }");
     }
