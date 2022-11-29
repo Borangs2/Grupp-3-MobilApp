@@ -5,52 +5,58 @@
 @inject ITechnicianService TechnicianService;
 @inject NavigationManager Navigation;
 
-<h3>Errand Details</h3>
-
 @if (_errand == null)
 {
     <p>Loading...</p>
 }
 else
 {
-    <div class="table-responsive">
-        <button @onclick="ReturnToMyErrands">Back</button>
+    <div class="container">
+        <div class="d-flex justify-content-between">
+            <div>
+                <h3>Errand Details</h3>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-primary" @onclick="ReturnToMyErrands">Back</button>
+            </div>
+        </div>
+
         <table class="table">
             <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Last edited</th>
-                    <th>Created at</th>
-                    <th>Created by</th>
-                    <th>Technician</th>
-                </tr>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Last edited</th>
+                <th>Created at</th>
+                <th>Created by</th>
+                <th>Technician</th>
+            </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>@_errand.Title</td>
-                    <td>@_errand.Description</td>
-                    <td>
-                        <select value="@SelectedStatus" @onchange="@ChangeStatus">
-                            @foreach (var status in _statusList)
+            <tr>
+                <td>@_errand.Title</td>
+                <td>@_errand.Description</td>
+                <td>
+                    <select value="@SelectedStatus" @onchange="@ChangeStatus">
+                        @foreach (var status in _statusList)
+                        {
+                            if (_errand.Status == status)
                             {
-                                if (_errand.Status == status)
-                                {
-                                    <option selected value="@status.ToString()">@status.ToString()</option>
-                                }
-                                else
-                                {
-                                    <option value="@status.ToString()">@status.ToString()</option>
-                                }
+                                <option selected value="@status.ToString()">@status.ToString()</option>
                             }
-                        </select>
-                    </td>
-                    <td>@_errand.LastEdited.ToString("d")</td>
-                    <td>@_errand.CreatedAt.ToString("d")</td>
-                    <td>@_errand.CreatedBy</td>
-                    <td>@_errand.Technician.Name</td>
-                </tr>
+                            else
+                            {
+                                <option value="@status.ToString()">@status.ToString()</option>
+                            }
+                        }
+                    </select>
+                </td>
+                <td>@_errand.LastEdited.ToString("d")</td>
+                <td>@_errand.CreatedAt.ToString("d")</td>
+                <td>@_errand.CreatedBy</td>
+                <td>@_errand.Technician.Name</td>
+            </tr>
             </tbody>
         </table>
     </div>
