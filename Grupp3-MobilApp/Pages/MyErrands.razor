@@ -58,7 +58,7 @@ else
         _errands = await ErrandService.GetErrandsFromTechnicianIdAsync(TechnicianId);
     }
 
-    public void ReturnToSelectTechnician()
+    private void ReturnToSelectTechnician()
     {
         Navigation.NavigateTo($"SelectTechnician/");
     }
