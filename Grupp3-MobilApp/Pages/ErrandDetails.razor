@@ -119,6 +119,11 @@ else
     protected override async Task OnInitializedAsync()
     {
         _errand = await ErrandService.GetErrandByIdAsync(ErrandId);
+        await PopulateViewModel();
+    }
+
+    public async Task PopulateViewModel()
+    {
         _comments = new List<CommentViewModel>();
 
         foreach (var comment in _errand.Comments)
