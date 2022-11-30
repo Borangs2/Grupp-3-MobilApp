@@ -112,7 +112,6 @@ else
     readonly List<ErrandStatus> _statusList = Enum.GetValues(typeof(ErrandStatus)).Cast<ErrandStatus>().ToList();
 
     List<CommentViewModel> _comments;
-    
 
     protected override async Task OnInitializedAsync()
     {
@@ -153,6 +152,7 @@ else
         if (statusCode.ToString() == HttpStatusCode.OK.ToString())
         {
             await App.Current.MainPage.DisplayAlert("Success", "Comment was saved", "Ok");
+            await ErrandService.UpdateErrand_LastEditAsync(_errand.Id.ToString());
         }
         else
         {
