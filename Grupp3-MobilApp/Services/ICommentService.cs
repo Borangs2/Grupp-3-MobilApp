@@ -30,9 +30,7 @@ namespace Grupp3_MobilApp.Services
 
             var response = await _client.PostAsync(uri, content);
 
-            if (response.IsSuccessStatusCode)
-                return HttpStatusCode.OK;
-            return HttpStatusCode.BadRequest;
+            return response.IsSuccessStatusCode ? HttpStatusCode.OK : HttpStatusCode.BadRequest;
         }
     }
 }

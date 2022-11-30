@@ -15,16 +15,14 @@ namespace Grupp3_MobilApp.Services
         Task<ErrandModel> GetErrandByIdAsync(string id);
         Task<IEnumerable<ErrandModel>> GetErrandsFromTechnicianIdAsync(string id);
         Task<HttpStatusCode> UpdateStatusAsync(string errandId, string status);
-        Task<HttpStatusCode> UpdateErrand_LastEditAsync(string errandId);
     }
 
     public class ErrandService : IErrandService
     {
         private const string BaseUrl = "https://grupp3azurefunctions.azurewebsites.net/api";
-
         private readonly HttpClient _client;
 
-        public ErrandModel Item { get; set; }
+        public ErrandModel Errand { get; set; }
         public List<ErrandModel> Errands { get; set; }
 
         public ErrandService()
@@ -34,8 +32,7 @@ namespace Grupp3_MobilApp.Services
 
         public async Task<ErrandModel> GetErrandByIdAsync(string id)
         {
-            Item = new ErrandModel();
-
+            Errand = new ErrandModel();
             var uri = new Uri(string.Format($"{BaseUrl}/errand?id={id}", string.Empty));
             try
             {
@@ -43,23 +40,20 @@ namespace Grupp3_MobilApp.Services
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    Item = JsonConvert.DeserializeObject<ErrandModel>(content);
+                    Errand = JsonConvert.DeserializeObject<ErrandModel>(content);
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(@"\tERROR {0}", ex.Message);
             }
-
-            return Item;
+            return Errand;
         }
 
         public async Task<IEnumerable<ErrandModel>> GetErrandsFromTechnicianIdAsync(string id)
         {
             Errands = new List<ErrandModel>();
-
             var uri = new Uri(string.Format($"{BaseUrl}/technicianErrand?id={id}", string.Empty));
-
             try
             {
                 var response = await _client.GetAsync(uri);
@@ -78,35 +72,15 @@ namespace Grupp3_MobilApp.Services
 
         public async Task<HttpStatusCode> UpdateStatusAsync(string errandId, string status)
         {
-            ChangeErrandStatusModel errandstatus = new ChangeErrandStatusModel { ErrandId = errandId, Status = status.ToString() };
-
+            var errandStatus = new ChangeErrandStatusModel { ErrandId = errandId, Status = status.ToString() };
             var uri = new Uri(string.Format($"{BaseUrl}/errands?", string.Empty));
 
-            var json = JsonConvert.SerializeObject(errandstatus);
-
+            var json = JsonConvert.SerializeObject(errandStatus);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response = await _client.PutAsync(uri, content);
 
-            if (response.IsSuccessStatusCode)
-            {
-                return HttpStatusCode.OK;
-            }
-            else
-            {
-                return HttpStatusCode.BadRequest;
-            }
-        }
-
-        public async Task<HttpStatusCode> UpdateErrand_LastEditAsync(string id)
-        {
-            var uri = new Uri(string.Format($"{BaseUrl}/errand/update?id={id}", string.Empty));
-
-            var content = new StringContent("", Encoding.UTF8, "application/json");
-
-            var response = await _client.PutAsync(uri, content);
-
-            return response.IsSuccessStatusCode ? HttpStatusCode.NoContent : HttpStatusCode.BadRequest;
+            return response.IsSuccessStatusCode ? HttpStatusCode.OK : HttpStatusCode.BadRequest;
         }
     }
 }

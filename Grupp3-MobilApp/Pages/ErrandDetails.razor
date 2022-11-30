@@ -11,7 +11,7 @@
 }
 else
 {
-    <div>
+    <div class="mb-3">
         <div class="d-flex justify-content-between">
             <div>
                 <h3>Errand Details</h3>
@@ -68,41 +68,41 @@ else
                 </tbody>
             </table>
         </div>
+        <h3 class="mb-3">Comments</h3>
+        <div class="mb-3 card shadow">
+            <div class="card-title p-1 m-1">
+                <h4>Add comment</h4>
+            </div>
+            <form method="post" class="form-control">
+                <div class="text-center">
+                    <textarea @bind="Content" class="form-control" placeholder="Write comment here..."></textarea>
+                    <button @onclick="AddCommentAsync" class="mt-1 mb-1 btn btn-primary" type="submit">Save</button>
+                </div>
+            </form>
+        </div>
+        <div class="d-flex flex-column gap-2">
+            @foreach (var comment in _comments.OrderByDescending(c => c.PostedAt).Take(5))
+            {
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="row border-bottom">
+                            <div class="col-8 fw-bold mb-2">@comment.Author.Name</div>
+                            <div class="col-4 fw-bold mb-2">@comment.PostedAt.ToString("d")</div>
+                        </div>
+                        <div class="row mt-2">
+                            <div>@comment.Content</div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
         
     </div>
 
-    <h3 class="mb-3">Comments</h3>
-    <div class="mb-3 card shadow">
-        <div class="card-title p-1 m-1">
-            <h4>Add comment</h4>
-        </div>
-        <form method="post" class="form-control">
-            <div class="text-center">
-                <textarea @bind="Content" class="form-control" placeholder="Write comment here..."></textarea>
-                <button @onclick="AddCommentAsync" class="mt-1 mb-1 btn btn-primary" type="submit">Save</button>
-            </div>
-        </form>
-    </div>
-    <div class="d-flex flex-column gap-2">
-        @foreach (var comment in _comments.OrderByDescending(c => c.PostedAt).Take(5))
-        {
-            <div class="card shadow">
-                <div class="card-body">
-                    <div class="row border-bottom">
-                        <div class="col-8 fw-bold mb-2">@comment.Author.Name</div>
-                        <div class="col-4 fw-bold mb-2">@comment.PostedAt.ToString("d")</div>
-                    </div>
-                    <div class="row mt-2">
-                        <div>@comment.Content</div>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
+
 }
 
 @code {
-
     public string Content;
 
     [Parameter]
@@ -119,6 +119,11 @@ else
     protected override async Task OnInitializedAsync()
     {
         _errand = await ErrandService.GetErrandByIdAsync(ErrandId);
+        await PopulateViewModel();
+    }
+
+    private async Task PopulateViewModel()
+    {
         _comments = new List<CommentViewModel>();
 
         foreach (var comment in _errand.Comments)
@@ -134,12 +139,12 @@ else
         }
     }
 
-    public void ReturnToMyErrands()
+    private void ReturnToMyErrands()
     {
         Navigation.NavigateTo($"MyErrands/{_errand.Technician.Id.ToString()}");
     }
 
-    public async void AddCommentAsync()
+    protected async void AddCommentAsync()
     {
         var commentModel = new CreateErrandCommentModel
         {
@@ -151,11 +156,9 @@ else
         };
 
         var statusCode = await CommentService.SaveCommentAsync(commentModel);
-
         if (statusCode.ToString() == HttpStatusCode.OK.ToString())
         {
             await App.Current.MainPage.DisplayAlert("Success", "Comment was saved", "Ok");
-            await ErrandService.UpdateErrand_LastEditAsync(_errand.Id.ToString());
         }
         else
         {
@@ -164,7 +167,7 @@ else
         await OnInitializedAsync();
     }
 
-    public async void ChangeStatus(ChangeEventArgs e)
+    protected async void ChangeStatus(ChangeEventArgs e)
     {
         var statusCode = await ErrandService.UpdateStatusAsync(ErrandId, e.Value.ToString());
 
