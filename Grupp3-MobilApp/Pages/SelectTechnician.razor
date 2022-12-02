@@ -1,0 +1,42 @@
+﻿@page "/"
+@page "/SelectTechnician"
+@inject ITechnicianService TechnicianService
+@inject NavigationManager Navigation
+
+<h3>Select Technician</h3>
+
+@if (_technicians == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="container card mt-3 shadow">
+        <table class="table">
+            <tbody>
+            @foreach (var technician in _technicians)
+            {
+                <tr @onclick="@(()=>DisplayMyErrands(technician))">
+                    <td>@technician.Name</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+
+
+@code {
+
+    IEnumerable<TechnicianModel> _technicians;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _technicians = await TechnicianService.GetAllTechnicians();
+    }
+
+    private void DisplayMyErrands(TechnicianModel technician)
+    {
+        Navigation.NavigateTo($"MyErrands/{ technician.Id.ToString() }");
+    }
+}
