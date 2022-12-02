@@ -81,7 +81,7 @@ else
             </form>
         </div>
         <div class="d-flex flex-column gap-2">
-            @foreach (var comment in _comments.OrderByDescending(c => c.PostedAt).Take(5))
+            @foreach (var comment in _comments.Take(5))
             {
                 <div class="card shadow">
                     <div class="card-body">
